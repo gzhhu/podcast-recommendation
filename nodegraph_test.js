@@ -2,9 +2,31 @@ var width = 1200;
 var height = 800;
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-d3.json("podcast_names_list.json").then(function(graph) {
-    
-    all_podcasts_unique = d3.set(graph).values();
+d3.json("podcast_graph.json").then(function(graph) {
+
+    global_label = {
+        'nodes': [],
+        'links': []
+    };
+
+    graph.nodes.forEach(function(d, i) {
+        global_label.nodes.push({node: d});
+        global_label.nodes.push({node: d});
+        global_label.links.push({
+            source: i * 2,
+            target: i * 2 + 1
+        });
+    });
+
+    // get a list of podcasts for suggestions
+    all_podcasts = [];
+
+    for (i=0; i<global_label.nodes.length; i++){
+        // console.log(label.nodes[i])
+        all_podcasts.push(global_label.nodes[i]['node']['name'])
+    }
+
+    all_podcasts_unique = d3.set(all_podcasts).values();
 
     // Jquery auto-complete suggestion
     $("#podcast_search_box").autocomplete({
@@ -19,6 +41,22 @@ d3.json("podcast_names_list.json").then(function(graph) {
             selected_podcast();
         }
     });
+
+    // all_podcasts_unique = d3.set(graph).values();
+    
+    // // Jquery auto-complete suggestion
+    // $("#podcast_search_box").autocomplete({
+    //     source: all_podcasts_unique
+    // })
+
+    // // Pressing enter on search
+    // $("podcast_search_box").keyup(function (e){
+    //     if (e.keyCode == 13) {
+    //         // 13 is the "Enter" key.
+    //         console.log("Selected Podcast and pressed Enter");
+    //         selected_podcast();
+    //     }
+    // });
     
     
 });
@@ -73,7 +111,7 @@ function make_directed_graph(podcast){
     // the function below clears out the graph whenever we want to do something different
     d3.select("#viz").html("");
 
-    d3.json("recommendations.json").then(function(graph) {
+    d3.json("podcast_graph.json").then(function(graph) {
 
         top10 = {
             'nodes': [],
@@ -88,7 +126,8 @@ function make_directed_graph(podcast){
         for (var i = 0; i < graph.nodes.length; i++){
                 if (graph.nodes[i]["name"] == podcast) {
                     group_number = graph.nodes[i]["group"]
-                    top10.nodes.push(graph.nodes[i])         
+                    top10.nodes.push({node:graph.nodes[i]})
+                       
             }
         }
         console.log('there should be 1 node only', top10.nodes)
@@ -99,7 +138,10 @@ function make_directed_graph(podcast){
         for (var i = 0; i < graph.links.length; i++){
      
                 if (graph.links[i]["source"] == group_number){
-                    top10.links.push(graph.links[i])
+                    // console.log(graph.links[1])
+                    top10.links.push({source: graph.links[i]['source'],
+                    target: graph.links[i]['target'],
+                    value: graph.links[i]['value']   })
               
             }
         }
@@ -116,7 +158,7 @@ function make_directed_graph(podcast){
         for (var i = 0; i < graph.nodes.length; i++){
             var node_group = graph.nodes[i]["group"]
             if (top10_list.indexOf(node_group) !== -1){
-                top10.nodes.push(graph.nodes[i])
+                top10.nodes.push({node:graph.nodes[i]})
             }
         }
         console.log("there should now be 6 nodes", top10.nodes)
@@ -125,15 +167,22 @@ function make_directed_graph(podcast){
         for (var i = 0; i < graph.links.length; i++){
             var node_group = graph.links[i]["source"]
             if (top10_list.indexOf(node_group) !== -1){
-                top10.links.push(graph.links[i])
+                top10.links.push({source: graph.links[i]['source'],
+                                  target: graph.links[i]['target'],
+                                  value: graph.links[i]['value']   })
             }
         }
         console.log("there should now be 31 links", top10.links)
+        
+        top10_list = []
+        top10_values = []
 
- 
-
-       
-     
+        top10.links.forEach(function(d){
+            // console.log("top 10 d", d.target)
+            top10_list.push(d.target)
+            top10_values.push(d.value)
+        })
+            
 
     var labelLayout = d3.forceSimulation(top10.nodes)
         .force("charge", d3.forceManyBody().strength(-50))
@@ -148,7 +197,6 @@ function make_directed_graph(podcast){
         .on("tick", ticked);
 
     var adjlist = [];
-
     top10.links.forEach(function(d) {
         adjlist[d.source.index + "-" + d.target.index] = true;
         adjlist[d.target.index + "-" + d.source.index] = true;

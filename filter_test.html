@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Podcast Recommendation</title>
+        <!-- Bootstrap Core CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+        <script src='https://d3js.org/d3.v5.min.js'></script>
+        <link rel="stylesheet" href="podcast.css"/>
+        <script type="text/javascript" src="nodegraph.js"></script>
+        <script type="text/javascript" src="wordcloud.js"></script>
+        <script type="text/javascript" src="stackedbarchart.js"></script>
+        <script src="../lib/d3-tip.min.js"></script>
+    </head>
+<body>
+<script>
+
+var podcast = 'The Ringer NBA Show'
+
+d3.json("recommendations_top5.json").then(function(graph) {
+    console.log(graph)
+    label = {
+        'nodes': [],
+        'links': []
+    };
+
+    top10 = {
+        'nodes': [],
+        'links': []
+    };
+
+
+    
+    // the group number is the look up ID for podcast
+    var group_number = 0
+
+    // a foor loop to find group number from the list of 17k podcasts
+    for (var i = 0; i < graph.nodes.length; i++){
+            if (graph.nodes[i]["name"] == podcast) {
+                group_number = graph.nodes[i]["group"]
+                top10.nodes.push(graph.nodes[i])         
+        }
+    }
+    console.log('there should be 1 node only', top10.nodes)
+    console.log('group_number should be 51', group_number)
+
+
+    // a for loop to find all the links from the user selection (group_number)
+    for (var i = 0; i < graph.links.length; i++){
+ 
+            if (graph.links[i]["source"] == group_number){
+                top10.links.push(graph.links[i])
+          
+        }
+    }
+    console.log("top recommendation links", top10.links)
+
+    // filter out targets from the links so we can do another filter
+    top10_list = []
+    for (var i = 0; i < top10.links.length; i++){
+        top10_list.push(top10.links[i]['target'])
+    }
+    console.log("list of top recommendation (targets)", top10_list)
+
+    // a for loop to find all the node information from the targets and append them to nodes
+    for (var i = 0; i < graph.nodes.length; i++){
+        var node_group = graph.nodes[i]["group"]
+        if (top10_list.indexOf(node_group) !== -1){
+            top10.nodes.push(graph.nodes[i])
+        }
+    }
+    console.log("there should now be 6 nodes", top10.nodes)
+
+    // a for loop to find all the links of targets
+    for (var i = 0; i < graph.links.length; i++){
+        var node_group = graph.links[i]["source"]
+        if (top10_list.indexOf(node_group) !== -1){
+            top10.links.push(graph.links[i])
+        }
+    }
+    console.log("there should now be 31 links", top10.links)
+
+
+})
+</script>
+</body>
+</html>

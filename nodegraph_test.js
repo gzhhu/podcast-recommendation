@@ -2,7 +2,7 @@ var width = 1200;
 var height = 800;
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-d3.json("podcast_graph.json").then(function(graph) {
+d3.json("recommendations_top5.json").then(function(graph) {
 
     global_label = {
         'nodes': [],
@@ -111,14 +111,21 @@ function make_directed_graph(podcast){
     // the function below clears out the graph whenever we want to do something different
     d3.select("#viz").html("");
 
-    d3.json("podcast_graph.json").then(function(graph) {
+    d3.json("recommendations_top5.json").then(function(graph) {
+
+        // graph.nodes
+        // graph.links
 
         top10 = {
             'nodes': [],
             'links': []
         };
     
-            
+        og_top = {
+            'nodes': [],
+            'links': []
+        }
+
         // the group number is the look up ID for podcast
         var group_number = 0
     
@@ -127,21 +134,25 @@ function make_directed_graph(podcast){
                 if (graph.nodes[i]["name"] == podcast) {
                     group_number = graph.nodes[i]["group"]
                     top10.nodes.push({node:graph.nodes[i]})
+                    og_top.nodes.push({node:graph.nodes[i]})
+                    // top10.nodes.push({node:graph.nodes[i]})
                        
             }
         }
+        // console.log('the ringer node, should be 1', ringer_top10.nodes)
         console.log('there should be 1 node only', top10.nodes)
-        console.log('group_number should be 51', group_number)
+        console.log('group_number should be 0', group_number)
     
     
         // a for loop to find all the links from the user selection (group_number)
         for (var i = 0; i < graph.links.length; i++){
      
                 if (graph.links[i]["source"] == group_number){
-                    // console.log(graph.links[1])
+                    // console.log(graph.links[i])
                     top10.links.push({source: graph.links[i]['source'],
                     target: graph.links[i]['target'],
-                    value: graph.links[i]['value']   })
+                    value: graph.links[i]['value']
+                })
               
             }
         }
@@ -150,7 +161,9 @@ function make_directed_graph(podcast){
         // filter out targets from the links so we can do another filter
         top10_list = []
         for (var i = 0; i < top10.links.length; i++){
+            // console.log(top10.links[i])
             top10_list.push(top10.links[i]['target'])
+            og_top.nodes.push(top10.links[i]['target'])
         }
         console.log("list of top recommendation (targets)", top10_list)
     
@@ -159,10 +172,14 @@ function make_directed_graph(podcast){
             var node_group = graph.nodes[i]["group"]
             if (top10_list.indexOf(node_group) !== -1){
                 top10.nodes.push({node:graph.nodes[i]})
+                // top10.nodes.push({node:graph.nodes[i]})
             }
         }
         console.log("there should now be 6 nodes", top10.nodes)
-    
+        
+        // these are the additional X2 recommendations to the original top X recommendations
+        var extra_list = []
+
         // a for loop to find all the links of targets
         for (var i = 0; i < graph.links.length; i++){
             var node_group = graph.links[i]["source"]
@@ -170,10 +187,33 @@ function make_directed_graph(podcast){
                 top10.links.push({source: graph.links[i]['source'],
                                   target: graph.links[i]['target'],
                                   value: graph.links[i]['value']   })
+                                  extra_list.push(graph.links[i]['target'])
             }
         }
-        console.log("there should now be 31 links", top10.links)
+        console.log("there should now be 30 links", top10.links)
+        // console.log("extra_list", extra_list)
+
+        extra_list = [...new Set(extra_list)]
+        // need to add these additional recommendations as nodes
+        for (var i = 0; i < graph.nodes.length; i++){
+            var node_group = graph.nodes[i]["group"]
+
+         
+            if (extra_list.indexOf(node_group) !== -1){
+                var exist = top10.nodes.filter(function(node) {
+                    return node.node.group == node_group;
+                });
+                if (exist.length == 0){
+                    top10.nodes.push({node: graph.nodes[i]})
+                }
+            }
+        }
         
+        // debugger;
+        // this breaks the model
+        // top10.nodes = new Set(top10.nodes)    
+        // console.log("unique top 10", top10.nodes)
+
         top10_list = []
         top10_values = []
 
@@ -182,18 +222,23 @@ function make_directed_graph(podcast){
             top10_list.push(d.target)
             top10_values.push(d.value)
         })
-            
+        
+        console.log("top 10 links", top10.links)
 
     var labelLayout = d3.forceSimulation(top10.nodes)
-        .force("charge", d3.forceManyBody().strength(-50))
-        .force("link", d3.forceLink(top10.links).distance(0).strength(2));
+        .force("charge", d3.forceManyBody().strength(-100))
+        // .force("link", d3.forceLink(top10.links).distance(0).strength(2));
+        .force("link", d3.forceLink(top10.links).id(function(d) {
+            return d.node.group;
+          }).distance(500).strength(1))
+  
 
     var graphLayout = d3.forceSimulation(top10.nodes)
         .force("charge", d3.forceManyBody().strength(-3000))
         .force("center", d3.forceCenter(width / 2, height / 2))
         .force("x", d3.forceX(width / 2).strength(1))
         .force("y", d3.forceY(height / 2).strength(1))
-        .force("link", d3.forceLink(top10.links).id(function(d) {return d.group; }).distance(50).strength(1))
+        .force("link", d3.forceLink(top10.links).id(function(d) {return d.node.group; }).distance(50).strength(1))
         .on("tick", ticked);
 
     var adjlist = [];
@@ -208,10 +253,10 @@ function make_directed_graph(podcast){
 
     
     //  a line scale to determine the width of the lines depending on the similiarty score (value)
-    var lineScale = d3.scaleSqrt().domain(d3.extent(top10_values)).range([0.5,5.5])
+    var lineScale = d3.scaleSqrt().domain(d3.extent(top10_values)).range([0.5,3])
 
     // a scale similar to the above to change nodes for top 10
-    var nodeScale = d3.scaleSqrt().domain(d3.extent(top10_values)).range([10,20])
+    var nodeScale = d3.scaleLinear().domain(d3.extent(top10_values)).range([10,20])
     // console.log("top 10 values", top10_values)
     // console.log("linescale", lineScale)
     // console.log("nodeScale", nodeScale)
@@ -282,9 +327,9 @@ function make_directed_graph(podcast){
         .enter()
         .append("circle")
         .attr("r", function(d){ 
-            // console.log(d.group)
+            console.log(d)
             // console.log(top10_list)
-            if (group_number == d.group){
+            if (group_number == d.node.group){
                 return 25;}
             else if (top10_list.includes(d.group)) {
                 // since graph.nodes and graph.links are different
@@ -305,7 +350,7 @@ function make_directed_graph(podcast){
             // console.log(d.group)
             // console.log(top10_list)
 
-            if (group_number == d.group){
+            if (group_number == d.node.group){
                 return "#0059FF";}
             else if (top10_list.includes(d.group)) {
                 return "#0D99E3";
@@ -386,9 +431,12 @@ function make_directed_graph(podcast){
         link.call(updateLink);
 
         labelLayout.alphaTarget(0.3).restart();
-        labelNode.each(function(d, i) {
-            d.x = d.node.x
-            d.y = d.node.y
+        labelNode.each(function(d) {
+            // console.log("ticked d", d)
+            // console.log("d.x", d.x)
+            // console.log("d.y", d.y)
+            d.x = d.x
+            d.y = d.y
 
         });
         labelNode.call(updateNode);

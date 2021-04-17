@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>Podcast Recommendation</title>
+        <!-- Bootstrap Core CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3.layout.cloud.js"></script>
+        <script src='https://d3js.org/d3.v5.min.js'></script>
+        <link rel="stylesheet" href="podcast.css"/>
+        <script type="text/javascript" src="nodegraph.js"></script>
+        <script type="text/javascript" src="wordcloud.js"></script>
+        <script type="text/javascript" src="stackedbarchart.js"></script>
+        <script type="text/javascript" src="scatterplot.js"></script>
+        <script src="../lib/d3-tip.min.js"></script>
+        <script src="../lib/papaparse.min.js"></script>
+    </head>
+
+
+
+<body>
+    
+    <div class='main-container'>
+    <div id='instructions'>
+        <H1>Podcast Recommendation Engine</H1>
+        <div id='title_viz_instruct_text'>About:</div>
+                    <div class='viz_instruct_text'>This force directed graph visualizes the top 10 podcast recommendations from your selection. </br> </br>Select any nodes to see it's own top 10 recommendations. Double click to zoom in and focus on a podcast you're interested in. Single click to unfocus the graph. </br> </br>Search for a podcast below.</div>
+        <div id='podcast_search_container' class='row'>
+            <input id='podcast_search_box' type="text" class="form-control" placeholder="Search Podcast" aria-describedby="sizing-addon2">
+
+            <div id='podcast_search_button' class="btn-group" data-toggle="buttons" >
+            <label id='podcast_search_submit' class="btn btn-primary active " onclick="selected_podcast();">
+                <input type="radio" name="options" id="" autocomplete="off" checked > Search
+            </label>
+            </div>
+        </div>
+        <div class='my-legend'>
+            <div class='legend-title'>Color Legend</div>
+            <div class='legend-scale'>
+              <ul class='legend-labels'>
+                <li><span style='background:#0059FF'></span>Original Selection</li>
+                <li><span style='background:#0D99E3;'></span>Top Recommendations</li>
+                <li><span style='background:#E1E1E1;'></span>Other Podcasts</li>
+              </ul>
+            </div>
+            <div class='my-tooltip'></div>
+            </div>
+    </div>
+    
+    <div id='viz_container'>
+        <svg id='viz'></svg>
+        <svg id='wordcloud'></svg>
+        <svg id='scatterplot'></svg>
+        <svg id='stackedbarchart'></svg>
+    </div>
+    </div>
+</body>
+
+
+</html>

@@ -1,5 +1,3 @@
-var width = 600;
-var height = 600;
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 d3.json("podcast_names_list.json").then(function(graph) {
@@ -186,7 +184,7 @@ function make_directed_graph(podcast, podcast_dict){
                                       extra_list.push(graph.links[i]['target'])
                 }
             }
-            console.log("there should now be 30 links", top10.links)
+            // console.log("there should now be 30 links", top10.links)
             // console.log("extra_list", extra_list)
     
             extra_list = [...new Set(extra_list)]
@@ -234,6 +232,8 @@ function make_directed_graph(podcast, podcast_dict){
 
             // console.log("podcast_dict length -> ", podcast_dict.data.length)
             // console.log("scatterplot list -> ", scatterplot_list)
+            // console.log("there should now be 30 links", top10.links)
+            // console.log("extra_list", extra_list)
 
             // console.log(top10_list)
             // console.log(top10_values)
@@ -241,6 +241,7 @@ function make_directed_graph(podcast, podcast_dict){
             // console.log("top 10 links", top10.links)
             // console.log("TEST")
             // console.log("papaparse array -> ", podcast_dict)
+            // console.log(og_top_10)
 
             /* ###########################
                ###########################
@@ -283,8 +284,8 @@ function make_directed_graph(podcast, podcast_dict){
                 var nodeScale = d3.scaleSqrt().domain(d3.extent(top10_values)).range([8,20])
 
 
-                const width = 800
-                const height = 800
+                const width = 1200
+                const height = 700
 
                 // ################### Tool Tip Section ########################
                 var tooltip = d3.tip()
@@ -297,7 +298,7 @@ function make_directed_graph(podcast, podcast_dict){
                         var podcast_rating = "NA" // default to NA if null
                         var podcast_review_count = "NA" // default to NA if null
                         var num_episodes = "NA" // default to NA if null
-                        var similarity_score = 1 // set to 1 because by default it is 100% similar to itself
+                        var similarity_score = 1 
 
                         podcast_dict.data.forEach(function(e){
                             if (e.name == d.name)
@@ -315,10 +316,15 @@ function make_directed_graph(podcast, podcast_dict){
                         })
 
                         graph.links.forEach(function(e){
-                            if (e.target == d.group) {
-                                similarity_score = e.value
+                            
+                            if (d.name == podcast){
+                                similarity_score = 1 // default master node to 100% similarity
                             }
-                        })
+                            else if (e.target == d.group) {
+                                similarity_score = e.value
+                                }
+                            }
+                        )
 
                         return ("<b>Podcast name</b>: " + podcast_name + "<br />"
                                             + "<b>Avg Rating</b>: " + podcast_rating + "<br />"
@@ -400,11 +406,15 @@ function make_directed_graph(podcast, podcast_dict){
                     .on("dblclick", function(d, i){
                         $.getScript("wordcloud.js", function(){
                         make_word_cloud(d.name);
+                        })
+
+                        $.getScript("stackedbarchart.js", function(){
+                            make_stackedbarchart(scatterplot_list);
+                            })
 
                         $.getScript("scatterplot.js", function(){
                             make_scatterplot(scatterplot_list);
                             })
-                        })
                     })
 
 
@@ -419,7 +429,11 @@ function make_directed_graph(podcast, podcast_dict){
                     .attr("dx",12)
                     .attr("dy",".35em")
                     .text(function(d){
+                        if (d.name.length > 10){
+                            return d.name.substring(0,15) + "..."
+                        } else {
                         return d.name;
+                        }
                     });    
                   
                 // Call tool tip, this is placed here bceuase it has to be after svg is defined
@@ -444,8 +458,7 @@ function make_directed_graph(podcast, podcast_dict){
               
                 // return svg.node();
                 
-              
-    
+                  
       
     
     

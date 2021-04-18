@@ -2,47 +2,38 @@ var width = 600;
 var height = 600;
 var color = d3.scaleOrdinal(d3.schemeCategory10);
 
-d3.json("recommendations_top10.json").then(function(graph) {
+d3.json("podcast_names_list.json").then(function(graph) {
 
-    global_label = {
-        'nodes': [],
-        'links': []
-    };
-
-    graph.nodes.forEach(function(d, i) {
-        global_label.nodes.push({node: d});
-        global_label.nodes.push({node: d});
-        global_label.links.push({
-            source: i * 2,
-            target: i * 2 + 1
-        });
-    });
-
-    // get a list of podcasts for suggestions
-    all_podcasts = [];
-
-    for (i=0; i<global_label.nodes.length; i++){
-        // console.log(label.nodes[i])
-        all_podcasts.push(global_label.nodes[i]['node']['name'])
-    }
-
-    all_podcasts_unique = d3.set(all_podcasts).values();
+    all_podcasts_unique = d3.set(graph).values();
 
     // Jquery auto-complete suggestion
-    $("#podcast_search_box").autocomplete({
-        source: all_podcasts_unique
-    })
+    $.ui.autocomplete.prototype._renderItem = function( ul, item){
+      var term = this.term.split(' ').join('|');
+      var re = new RegExp("(" + term + ")", "gi") ;
+      var t = item.label.replace(re,"<b>$1</b>");
+      return $( "<li></li>" )
+         .data( "item.autocomplete", item )
+         .append( "<a>" + t + "</a>" )
+         .appendTo( ul );
+       };
 
-    // Pressing enter on search
+    $("#podcast_search_box").autocomplete({
+        minLength:2,
+        delay:0,
+        autoFocus:true,
+        source: function (request, response) {
+          var results = $.ui.autocomplete.filter(all_podcasts_unique, request.term);
+          response(results.slice(0, 20));
+        }
+    });
+
     $("podcast_search_box").keyup(function (e){
         if (e.keyCode == 13) {
             // 13 is the "Enter" key.
             console.log("Selected Podcast and pressed Enter");
             selected_podcast();
-        }
+        };
     });
-    
-    
 });
 
 // This is the configuration to import our master csv file via PapaParse https://www.papaparse.com/docs#config

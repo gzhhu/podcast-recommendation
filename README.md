@@ -8,7 +8,7 @@ To install this package, use the following:
 
 `$ python -m pip install git+https://github.com/gzhhu/podcast-recommendation.git`
 
-Then install the dependencies: 
+Then navigate to the project directory and install the dependencies: 
 
 `$ python pip install -r requirements.txt `
 

@@ -12,6 +12,3 @@
 	 * recommendations_top10.json
 	 * top100_words.json
 
-4. Data prep for viz
-	* 
-

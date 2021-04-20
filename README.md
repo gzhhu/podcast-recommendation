@@ -16,8 +16,9 @@ Then navigate to the project directory and install the dependencies:
 
 Script | Description | Output
 :----- | :---- | :------
-1 - Scraping/get_podcast_names.ipynb   | Scrape the top 200 podcasts of each genre. | podcast_ID_list.csv
+1 - Scraping/get_podcast_names.ipynb   | Scrape the top 200 podcast IDs of each genre. | podcast_ID_list.csv
 1 - Scraping/get_podcast_reviews.ipynb   | Scrape the first 500 reviews for each podcast in `podcast_ID_list.csv` | podcastReviews.csv
+1 - Scraping/get_podcast_info.ipynb   | Scrape information for each podcast in `podcast_ID_list.csv` including titles, descriptions, and artist names | 
 
 ## Running the web application
 

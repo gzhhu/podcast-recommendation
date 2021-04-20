@@ -20,6 +20,7 @@ Script | Description | Output
 1 - Scraping/get_podcast_reviews.ipynb   | Scrape the first 500 reviews for each podcast in `podcast_ID_list.csv`. | GuidePod.sqlite
 1 - Scraping/get_podcast_feedinfo.ipynb   | Scrape feed information for each podcast in `podcast_ID_list.csv`. | GuidePod.sqlite
 1 - Scraping/get_podcast_episodes.ipynb   | Scrape episode data for each podcast in `podcast_ID_list.csv`. | GuidePod.sqlite
+2 - Cleaning/cleaning.ipynb   | Clean `GuidePod.sqlite` and join tables. | GuidePod_clean.sqlite
 
 ## Running the web application
 

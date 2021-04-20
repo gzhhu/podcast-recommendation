@@ -61,7 +61,7 @@ const ratioOfLikert = (keys, getN, data) => {
         ratio[i] = ratioRounder(raw / N);
         return acc;
       },
-      { obs: [], ratio: [], N: getN(d), label: d.name }
+      { obs: [], ratio: [], N: getN(d), label: d.name.substring(0,20) + "..." }
     );
   });
 };

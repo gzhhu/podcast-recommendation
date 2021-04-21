@@ -2,13 +2,11 @@
 
 1. Scraping
 	* podcast_ID_list.csv
-	* podcastReviews.csv
+	* GuidePod.sqlite
 
 2. Cleaning
-	* podcast_raw.sqlite
+	* GuidePod_clean.sqlite
 
 3. Modeling
 	 * podcast.csv
-	 * recommendations_top10.json
-	 * top100_words.json
 

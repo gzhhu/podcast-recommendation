@@ -14,13 +14,15 @@ To install this project, enter the following in your command line to clone this 
 
 `$ git clone https://github.com/gzhhu/podcast-recommendation.git`
 
-Then navigate to the project directory and install the dependencies: 
-
-`$ python pip install -r requirements.txt `
-
 ### Scraping, data processing, and modeling (optional)
 
 If you would like to run the web scraping, data processing, and modeling processes, run the below Jupyter Notebooks in the provided order. Note that the complete run-time for all of these notebooks will be approximately 6-7 hours on most machines. Running these notebooks is an optional step, as all of the data needed to run this web applicaton is already provided in this repository.
+
+First, navigate to the project directory and install all of the Python dependencies: 
+
+`$ python pip install -r requirements.txt `
+
+Then, running the notebooks below in the following order. These notebooks will produce various data file output, which will populate in the `Data` directory, or the `5 - Visualizations\data` directory.
 
 Script | Description | Output
 :----- | :---- | :------

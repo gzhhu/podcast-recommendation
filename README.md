@@ -22,7 +22,7 @@ First, navigate to the project directory and enter the following in your command
 
 `$ python pip install -r requirements.txt `
 
-Then, running the notebooks below in the following order. These notebooks will produce various data file output, which will populate in the `Data` directory, or the `5 - Visualizations\data` directory.
+Then, running the notebooks below in the following order. These notebooks will produce various data file output, which will populate in the `Data` directory, or the `4 - Visualizations\data` directory.
 
 Script | Description | Output
 :----- | :---- | :------
@@ -45,6 +45,6 @@ Then open up a web broswer (Chrome or Firefox), and navigate to the folder throu
 
 `localhost:8000/../podcast-recomendation/`
 
-Navigate to the `5 - Visualizations` folder and open up `podcast.html`.
+Navigate to the `4 - Visualizations` folder and open up `podcast.html`.
 
 Then search for the podcast of your choice.

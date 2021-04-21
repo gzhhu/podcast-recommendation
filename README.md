@@ -2,9 +2,9 @@
 
 ## DESCRIPTION
 
-This package scrapes Apple Podcast Show descriptions, episode descriptions, and listener reviews through Apple's API and the show's individual RSS feeds. Then it cleans, lemmatize, and store the data into Bag-of-Words. Feature selection is done through stopwords removal and TD-IDF feature weighting. The final modeling is a kNN model with cosaine similarity as a distance metric.
+GuidePod is a dynamic podcast recommendation engine, which includes a web application featuring interactive visualizations. This package includes the necessary code for running the GuidePod web application, as well as the relevant code for building it from scratch. This package scrapes Apple Podcast Show descriptions, episode descriptions, and listener reviews through Apple's API and the show's individual RSS feeds. Then it cleans, lemmatize, and vectorizes the text into Bag-of-Words. Words are then weighted through TD-IDF. The final recommendation engine is a kNN model based on the pair-wise cosine similarities between podcasts.
 
-Visualizations are done through HTML, CSS, JS, and D3.js. Users can search for podcasts on the HTML interface with a browser client and explore recommendations.
+The web application can be run without performing all of the scraping, preprocessing, and modeling steps, as the relevant final data is already provided. The web application features several interactive visualizations, done through HTML, CSS, JS, and D3.js. Users can search for podcasts on the HTML interface with a browser client and explore recommendations.
 
 ## INSTALLATION
 

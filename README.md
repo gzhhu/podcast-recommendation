@@ -39,7 +39,7 @@ Set up local testing server via python by running the following:
 
 Then open up a web broswer (Chrome or Firefox), and navigate to the folder through localhost:/8000:
 
-`localhost:8000/../podcast-recomendation-main/`
+`localhost:8000/../podcast-recomendation/`
 
 Navigate to the `5 - Visualizations` folder and open up `podcast.html`.
 

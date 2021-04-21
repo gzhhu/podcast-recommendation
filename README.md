@@ -1,8 +1,12 @@
 # GuidePod
 
-Description of the project
+## DESCRIPTION
 
-## Installation
+This package scrapes Apple Podcast Show descriptions, episode descriptions, and listener reviews through Apple's API and the show's individual RSS feeds. Then it cleans, lemmatize, and store the data into Bag-of-Words. Feature selection is done through stopwords removal and TD-IDF feature weighting. The final modeling is a kNN model with cosaine similarity as a distance metric.
+
+Visualizations are done through HTML, CSS, JS, and D3.js. Users can search for podcasts on the HTML interface with a browser client and explore recommendations.
+
+## INSTALLATION
 
 To install this package, use the following:
 
@@ -12,7 +16,7 @@ Then navigate to the project directory and install the dependencies:
 
 `$ python pip install -r requirements.txt `
 
-## Scraping, data processing, and modeling
+### Scraping, data processing, and modeling
 
 Script | Description | Output
 :----- | :---- | :------
@@ -25,7 +29,7 @@ Script | Description | Output
 3 - Modeling + Data Prep/recommendations.ipynb   | Build the recommendation model. | `recommendations_top10.json`
 3 - Modeling + Data Prep/word counts.ipynb   | Identify the most frequently used words. | `top100_words.json`
 
-## Running the web application
+## EXECUTION - Running the web application
 
 Set up local testing server via python by running the following:
 

@@ -18,7 +18,7 @@ To install this project, enter the following in your command line to clone this 
 
 If you would like to run the web scraping, data processing, and modeling processes, run the below Jupyter Notebooks in the provided order. Note that the complete run-time for all of these notebooks will be approximately 6-7 hours on most machines. Running these notebooks is an optional step, as all of the data needed to run this web applicaton is already provided in this repository.
 
-First, navigate to the project directory and install all of the Python dependencies: 
+First, navigate to the project directory and enter the following in your command line to install all of the Python dependencies: 
 
 `$ python pip install -r requirements.txt `
 

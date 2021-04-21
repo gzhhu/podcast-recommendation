@@ -8,9 +8,9 @@ Visualizations are done through HTML, CSS, JS, and D3.js. Users can search for p
 
 ## INSTALLATION
 
-To install this package, use the following:
+To install this project, enter the following in your command line to clone this repository:
 
-`$ python -m pip install git+https://github.com/gzhhu/podcast-recommendation.git`
+`$ git clone https://github.com/gzhhu/podcast-recommendation.git`
 
 Then navigate to the project directory and install the dependencies: 
 

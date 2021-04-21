@@ -16,7 +16,7 @@ Then navigate to the project directory and install the dependencies:
 
 `$ python pip install -r requirements.txt `
 
-#### Scraping, data processing, and modeling
+### Scraping, data processing, and modeling
 
 Script | Description | Output
 :----- | :---- | :------

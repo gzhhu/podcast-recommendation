@@ -12,6 +12,10 @@ Then navigate to the project directory and install the dependencies:
 
 `$ python pip install -r requirements.txt `
 
+## Running the web application
+
+...
+
 ## Scraping, data processing, and modeling
 
 Script | Description | Output
@@ -25,6 +29,3 @@ Script | Description | Output
 3 - Modeling + Data Prep/recommendations.ipynb   | Build the recommendation model. | `recommendations_top10.json`
 3 - Modeling + Data Prep/word counts.ipynb   | Identify the most frequently used words. | `top100_words.json`
 
-## Running the web application
-
-...

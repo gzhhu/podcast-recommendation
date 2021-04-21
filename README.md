@@ -12,10 +12,6 @@ Then navigate to the project directory and install the dependencies:
 
 `$ python pip install -r requirements.txt `
 
-## Running the web application
-
-...
-
 ## Scraping, data processing, and modeling
 
 Script | Description | Output
@@ -29,3 +25,16 @@ Script | Description | Output
 3 - Modeling + Data Prep/recommendations.ipynb   | Build the recommendation model. | `recommendations_top10.json`
 3 - Modeling + Data Prep/word counts.ipynb   | Identify the most frequently used words. | `top100_words.json`
 
+## Running the web application
+
+Set up local testing server via python by running the following:
+
+`$ python3 -m http.server`
+
+Then open up a web broswer (Chrome or Firefox), and navigate to the folder through localhost:/8000:
+
+`localhost:8000/../podcast-recomendation-main/`
+
+Navigate to the `5 - Visualizations` folder and open up `podcast.html`.
+
+Then search for the podcast of your choice.
